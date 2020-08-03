@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  phpipam-web:
+    container_name: phpipam
+    image: phpipam/phpipam-www:latest
+    ports:
+      - "127.0.0.1:5500:80"
+    #Connection with remote mariadb/mysql server
+    environment:
+      - TZ=America/Argentina/Buenos_Aires
+      - IPAM_DATABASE_HOST=<remote_host>
+      - IPAM_DATABASE_USER=phpipam
+      - IPAM_DATABASE_PASS=^syjx9B@Z2Jc
+      - IPAM_DATABASE_NAME=phpipam
+    restart: unless-stopped
+    volumes:
+      - phpipam-logo:/phpipam/css/images/logo
+
+  phpipam-cron:
+    image: phpipam/phpipam-cron:latest
+    environment:
+        - TZ=America/Argentina/Buenos_Aires
+        - IPAM_DATABASE_HOST=<remote_host>
+        - IPAM_DATABASE_USER=phpipam
+        - IPAM_DATABASE_PASS=^syjx9B@Z2Jc
+        - IPAM_DATABASE_NAME=phpipam
+        - SCAN_INTERVAL=1h
+    restart: unless-stopped
